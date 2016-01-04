@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # Send a big UDP packet to our server
+# Demonstrates packet fragmentation
 
 import IN, socket, sys
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
