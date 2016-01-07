@@ -10,7 +10,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 MAX = 65535
 PORT = 1060
 
-if 2 <= len(sys.argv) <=3 and sys.argv[1] = 'server':
+if 2 <= len(sys.argv) <=3 and sys.argv[1] == 'server':
     s.bind(('', PORT))
     print 'Listening for broadcasts at', s.getsockname()
     while True:
@@ -21,5 +21,5 @@ elif len(sys.argv) == 3 and sys.argv[1] == 'client':
     s.sendto('Broadcast message!', (network, PORT))
 else:
     print >>sys.stderr, 'usage: udp_broadcast.py server'
-    print >>sys.stderr, '   or: udp_broadcaset.py client <host>'
+    print >>sys.stderr, '   or: udp_broadcast.py client <host>'
     sys.exit(2)
