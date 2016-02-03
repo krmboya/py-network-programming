@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # UDP client and server talking over a network
 # Demonstrating exponential backoff
+from __future__ import print_function
+
 import socket
 import sys
 import random
@@ -13,23 +15,25 @@ PORT = 1060
 if 2 <= len(sys.argv) <= 3 and sys.argv[1] == 'server':
     interface = sys.argv[2] if len(sys.argv) > 2 else ''
     s.bind((interface, PORT))
-    print 'Listening at', s.getsockname()
+    print('Listening at', s.getsockname())
     while True:
         data, address = s.recvfrom(MAX)
-        if random.randint(0, 3) == 3:
-            print 'The client at', address, 'says', repr(data)
-            s.sendto('Your data was %d bytes' % len(data), address)
+        if random.randint(0, 2) == 1:
+            print('The client at', address, 'says', repr(data))
+            s.sendto(
+                'Your data was {0} bytes'.format(len(data)).encode("utf-8"), 
+                address)
         else:
-            print "Pretending to drop packet from", address
+            print("Pretending to drop packet from", address)
 
 elif len(sys.argv) == 3 and sys.argv[1] == 'client':
     hostname = sys.argv[2]
     s.connect((hostname, PORT))
-    print 'Client socket name is', s.getsockname()
+    print ('Client socket name is', s.getsockname())
     delay = 0.1
     while True:
-        s.send("This is another message")
-        print "Waiting up to", delay, "seconds for a reply"
+        s.send("This is another message".encode("utf-8"))
+        print ("Waiting up to", delay, "seconds for a reply")
         s.settimeout(delay)
         try:
             data = s.recv(MAX)
@@ -41,9 +45,9 @@ elif len(sys.argv) == 3 and sys.argv[1] == 'client':
             raise
         else:
             break
-    print 'The server says', repr(data)
+    print('The server says', repr(data))
 
 else:
-    print >>sys.stderr, 'usage: udp_remote.py server [ <interface> ]'
-    print >>sys.stderr, '   or: udp_remote.py client <host>'
+    sys.stderr.write('usage: udp_remote.py server [ <interface> ]\n')
+    sys.stderr.write('   or: udp_remote.py client <host>\n')
     sys.exit(2)
