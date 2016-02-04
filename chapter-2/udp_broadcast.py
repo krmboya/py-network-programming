@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # UDP client and server for broadcast messages on local LAN
+from __future__ import print_function
 
 import socket
 import sys
@@ -12,14 +13,14 @@ PORT = 1060
 
 if 2 <= len(sys.argv) <=3 and sys.argv[1] == 'server':
     s.bind(('', PORT))
-    print 'Listening for broadcasts at', s.getsockname()
+    print ('Listening for broadcasts at', s.getsockname())
     while True:
         data, address = s.recvfrom(MAX)
-        print 'The client at %r says: %r' % (address, data)
+        print ('The client at %r says: %r' % (address, data))
 elif len(sys.argv) == 3 and sys.argv[1] == 'client':
     network = sys.argv[2]
-    s.sendto('Broadcast message!', (network, PORT))
+    s.sendto('Broadcast message!'.encode('utf-8'), (network, PORT))
 else:
-    print >>sys.stderr, 'usage: udp_broadcast.py server'
-    print >>sys.stderr, '   or: udp_broadcast.py client <host>'
+    sys.stderr.write('usage: udp_broadcast.py server\n')
+    sys.stderr.write('   or: udp_broadcast.py client <host>\n')
     sys.exit(2)
