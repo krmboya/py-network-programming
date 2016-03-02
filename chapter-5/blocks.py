@@ -34,7 +34,7 @@ if sys.argv[1:] == ['server']:
     print 'Listening at', s.getsockname()
     sc, sockname = s.accept()
     print 'Accepted connection from', sockname
-    sc.shutdown(socket.SHUT_WR)
+    sc.shutdown(socket.SHUT_WR)  # only reading, no writing
     while True:
         message = get(sc)
         if not message:
@@ -45,7 +45,7 @@ if sys.argv[1:] == ['server']:
 
 elif sys.argv[1:] == ['client']:
     s.connect((HOST, PORT))
-    s.shutdown(socket.SHUT_RD)
+    s.shutdown(socket.SHUT_RD)  # only writing, no reading
     put(s, 'Beautiful is better than ugly.')
     put(s, 'Explicit is better than implicit.')
     put(s, 'Simple is better than complex.')
@@ -53,4 +53,4 @@ elif sys.argv[1:] == ['client']:
     s.close()
 
 else:
-    print >>sys.stderr, 'usage: streamer.py server|client [host]'
+    print >>sys.stderr, 'usage: blocks.py server|client [host]'
