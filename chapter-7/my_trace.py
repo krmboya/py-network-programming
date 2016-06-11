@@ -6,6 +6,10 @@ import linecache, sys, time
 
 def make_tracer(funcname):
     def mytrace(frame, event, arg):
+        """Records info whenever a line in `funcname` is executed
+
+        Returns a reference to itself"""
+        
         if frame.f_code.co_name == funcname:
             if event == 'line':
                 _events.append((time.time(), frame.f_code.co_filename,
