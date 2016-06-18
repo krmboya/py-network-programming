@@ -9,7 +9,7 @@ def handle_client(client_sock):
         while True:
             question = lancelot.recv_until(client_sock, '?')
             answer = lancelot.qadict[question]
-            client_sock.sendall(answer)
+            client_sock.sendall(answer.encode("utf-8"))
     except EOFError:
         client_sock.close()
 
