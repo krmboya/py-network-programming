@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Foundations of Python Network Programming - Chapter 7 - my_trace.py
 # Command-line tool for tracing a single function in a program.
 
@@ -20,12 +21,14 @@ def make_tracer(funcname):
 if __name__ == '__main__':
     _events = []
     if len(sys.argv) < 3:
-        print >>sys.stderr, 'usage: my_trace.py funcname other_script.py ...'
+        sys.stderr.write('usage: my_trace.py funcname other_script.py ...\n')
         sys.exit(2)
     sys.settrace(make_tracer(sys.argv[1]))
     del sys.argv[0:2]  # show the script only its own name and arguments
     try:
-        execfile(sys.argv[0])
+        with open(sys.argv[0]) as f:
+            code_obj = compile(f.read(), sys.argv[0], 'exec')
+            exec(code_obj)
     finally:
         for t, filename, lineno in _events:
             s = linecache.getline(filename, lineno)
