@@ -5,6 +5,7 @@
 import lancelot
 
 def handle_client(client_sock):
+    """Responds to client until connection closed"""
     try:
         while True:
             question = lancelot.recv_until(client_sock, '?')
@@ -14,6 +15,7 @@ def handle_client(client_sock):
         client_sock.close()
 
 def server_loop(listen_sock):
+    """Accepts a new client for communication"""
     while True:
         client_sock, sockname = listen_sock.accept()
         handle_client(client_sock)
