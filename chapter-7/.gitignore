@@ -1,2 +1,4 @@
 *.log
 *.xml
+*.xml.bak*
+test_dialog*
