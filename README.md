@@ -1,7 +1,10 @@
-# Python network programming snippets
+# Python network clients and servers
 
-These are network programming snippets adapted from the book *Foundations of Python Network Programming* Second Edition by Brandon Rhodhes and John Goerzen.
+These are a collection of python network clients and servers demonstrating
+various networking concepts, based on the book 
+*Foundations of Python Network Programming* second edition by 
+Brandon Rhodhes and John Goerzen.
 
-http://www.apress.com/9781430230038?gtmf=s
+http://www.apress.com/9781430230038
 
-The tentative plan is to make them runnable under both Python 2 and Python 3 
+Ongoing work to make them run under both Python versions 2 and 3.
