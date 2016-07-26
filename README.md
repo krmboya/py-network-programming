@@ -7,4 +7,5 @@ Brandon Rhodhes and John Goerzen.
 
 http://www.apress.com/9781430230038
 
-Ongoing work to make them run under both Python versions 2 and 3.
+Ongoing work to make them run under both Python versions 2 and 3, and annotate
+with comments.

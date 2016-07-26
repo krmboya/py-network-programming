@@ -6,17 +6,21 @@ import lancelot
 import select
 
 listen_sock = lancelot.setup()
+# a dict tracking sockets via their file descriptors
 sockets = { listen_sock.fileno(): listen_sock }
 requests = {}
 responses = {}
 
+# Get a poll object and register the listening socket
+# for the incoming data event
 poll = select.poll()
 poll.register(listen_sock, select.POLLIN)
 
 while True:
     for fd, event in poll.poll():
+        # For each socket file descriptor with an event to be handled
+        
         sock = sockets[fd]
-
         # Removed closed sockets from our list.
         if event & (select.POLLHUP | select.POLLERR | select.POLLNVAL):
             poll.unregister(fd)
@@ -27,8 +31,11 @@ while True:
         # Accept connections from new sockets.
         elif sock is listen_sock:
             newsock, sockname = sock.accept()
-            newsock.setblocking(False)
+            # set communicating socket to non-blocking
+            newsock.setblocking(False) 
             fd = newsock.fileno()
+            # track it using file descriptor
+            # and register with poll object for incoming data
             sockets[fd] = newsock
             poll.register(fd, select.POLLIN)
             requests[newsock] = ''
