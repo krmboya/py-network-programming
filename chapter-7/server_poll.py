@@ -35,6 +35,7 @@ while True:
         elif sock is listen_sock:
             newsock, sockname = sock.accept()
             # set communicating socket to non-blocking
+            # throws error if not data can be sent or received
             newsock.setblocking(False) 
             fd = newsock.fileno()
             # track it using file descriptor
