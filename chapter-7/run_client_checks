@@ -2,3 +2,4 @@
 
 fl-run-test lancelot_tests.py TestLancelot.test_dialog
 fl-run-bench lancelot_tests.py TestLancelot.test_dialog
+fl-build-report --html bench.xml
