@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Foundations of Python Network Programming - Chapter 7 - server_poll.py
 # An event-driven approach to serving several clients with poll().
 
@@ -35,14 +36,14 @@ while True:
         elif sock is listen_sock:
             newsock, sockname = sock.accept()
             # set communicating socket to non-blocking
-            # throws error if not data can be sent or received
+            # throws error if no data can be sent or received
             newsock.setblocking(False) 
             fd = newsock.fileno()
             # track it using file descriptor
             # and register with poll object for incoming data
             sockets[fd] = newsock
             poll.register(fd, select.POLLIN)
-            requests[newsock] = ''
+            requests[newsock] = b''
 
         # Collect incoming data until it forms a question.
         elif event & select.POLLIN:
@@ -51,11 +52,14 @@ while True:
                 sock.close()  # makes POLLNVAL happen next time
                 continue
             requests[sock] += data
-            if '?' in requests[sock]:
+            if b'?' in requests[sock]:
                 # Recieved a complete question
                 # Retrieve the answer and mark the socket for outgoing data
                 question = requests.pop(sock)
+                # convert from bytes to unicode, and retrieve response
+                question = question.decode("utf-8")
                 answer = dict(lancelot.qa)[question]
+                answer = answer.encode("utf-8")  # convert response to bytes
                 poll.modify(sock, select.POLLOUT)
                 responses[sock] = answer  # set the outgoing response
 
@@ -70,4 +74,4 @@ while True:
             else:
                 # whole response sent, modify to expect incoming data
                 poll.modify(sock, select.POLLIN)
-                requests[sock] = ''
+                requests[sock] = b''
