@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Foundations of Python Network Programming - Chapter 7 - server_multi.py
 # Using multiple threads or processes to serve several clients in parallel.
+from __future__ import print_function
 
 import sys, time, lancelot
 from multiprocessing import Process
@@ -18,7 +20,7 @@ def start_worker(Worker, listen_sock):
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or sys.argv[2] not in WORKER_CLASSES:
-        print >>sys.stderr, 'usage: server_multi.py interface thread|process'
+        sys.stderr.write('usage: server_multi.py interface thread|process\n')
         sys.exit(2)
     # Select appropriate worker type: Process or Thread
     Worker = WORKER_CLASSES[sys.argv.pop()]  # setup() wants len(argv)==2
@@ -35,6 +37,6 @@ if __name__ == '__main__':
         time.sleep(2)
         for worker in workers:
             if not worker.is_alive():
-                print worker.name, "died; starting replacement worker"
+                print(worker.name, "died; starting replacement worker")
                 workers.remove(worker)
                 workers.append(start_worker(Worker, listen_sock))
