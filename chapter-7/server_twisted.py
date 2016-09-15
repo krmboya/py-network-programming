@@ -8,13 +8,15 @@ import lancelot
 
 class Lancelot(Protocol):
     def connectionMade(self):
-        self.question = ''
+        self.question = b''
 
     def dataReceived(self, data):
         self.question += data
-        if self.question.endswith('?'):
-            self.transport.write(dict(lancelot.qa)[self.question])
-            self.question = ''
+        if self.question.endswith(b'?'):
+            question = self.question.decode("utf-8")
+            answer = dict(lancelot.qa)[question]
+            self.transport.write(answer.encode("utf-8"))
+            self.question = b''
 
 factory = ServerFactory()
 factory.protocol = Lancelot
