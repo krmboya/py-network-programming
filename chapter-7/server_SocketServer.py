@@ -2,7 +2,11 @@
 # Foundations of Python Network Programming - Chapter 7 - server_SocketServer.py
 # Answering Lancelot requests with a SocketServer.
 
-from SocketServer import ThreadingMixIn, TCPServer, BaseRequestHandler
+try:
+    from socketserver import ThreadingMixIn, TCPServer, BaseRequestHandler
+except ImportError:
+    from SocketServer import ThreadingMixIn, TCPServer, BaseRequestHandler
+
 import lancelot, server_simple, socket
 
 class MyHandler(BaseRequestHandler):
