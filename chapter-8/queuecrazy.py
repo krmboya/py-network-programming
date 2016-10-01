@@ -1,6 +1,9 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Foundations of Python Network Programming - Chapter 8 - queuecrazy.py
 # Small application that uses several different message queues
+
+from __future__ import print_function
 
 import random, threading, time, zmq
 zcontext = zmq.Context()
@@ -11,7 +14,7 @@ def fountain(url):
     zsock.bind(url)  # bind to a well known port that consumers can connect to
     words = [ w for w in dir(__builtins__) if w.islower() ]
     while True:
-        zsock.send(random.choice(words))
+        zsock.send(random.choice(words).encode("utf-8"))
         time.sleep(0.4)
 
 def responder(url, function):
@@ -19,8 +22,13 @@ def responder(url, function):
     zsock = zcontext.socket(zmq.REP)  # a zmq responder - services requests
     zsock.bind(url)
     while True:
-        word = zsock.recv()  # receive word from processor
-        zsock.send(function(word))  # send the modified word back
+        word = zsock.recv().decode("utf-8")  # receive word from processor
+        try:
+            converted = function(word).encode("utf-8")
+        except TypeError:
+            # py2
+            converted = function(word.encode("utf-8"))
+        zsock.send(converted)  # send the modified word back
 
 def processor(n, fountain_url, responder_urls):
     """Read words as they are produced; get them processed; print them."""
@@ -36,7 +44,7 @@ def processor(n, fountain_url, responder_urls):
     while True:
         word = zpullsock.recv()  # receive message from producer
         zreqsock.send(word)  # sends message to responder, alternates btn the 2
-        print n, zreqsock.recv()  # receives response from producer
+        print(n, zreqsock.recv())  # receives response from producer
 
 def start_thread(function, *args):
     thread = threading.Thread(target=function, args=args)
